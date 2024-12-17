@@ -13,13 +13,14 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             padding: 20px;
             border-radius: 8px;
             z-index: 1000;
             text-align: center;
             width: 90%;
             max-width: 400px;
+            font-family: Arial, sans-serif;
         }
 
         /* Overlay background */
@@ -34,7 +35,7 @@
             z-index: 999;
         }
 
-        /* Close button */
+        /* Join button */
         #popup button {
             background-color: #007bff;
             color: white;
@@ -48,6 +49,21 @@
         #popup button:hover {
             background-color: #0056b3;
         }
+
+        /* Cancel button - low visibility */
+        #cancel {
+            background: none;
+            border: none;
+            color: gray;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #cancel:hover {
+            color: darkgray;
+        }
     </style>
 </head>
 <body>
@@ -57,10 +73,12 @@
     <!-- Popup Message -->
     <div id="popup">
         <h2>Join Our Telegram Channel</h2>
-        <p>Stay updated by joining our Telegram community!</p>
+        <p>This website may go offline soon. Join our Telegram to stay connected and not miss out!</p>
         <a href="https://t.me/+nJCypsY4VzlkZjdl" target="_blank">
-            <button>Join Now</button>
+            <button>Join Fast</button>
         </a>
+        <br>
+        <button id="cancel">Cancel</button>
     </div>
 
     <script>
@@ -72,11 +90,14 @@
             }, 2000);
         };
 
-        // Hide the popup and overlay when the overlay is clicked
-        document.getElementById('overlay').onclick = function() {
+        // Close popup on "Cancel" button click or overlay click
+        function closePopup() {
             document.getElementById('popup').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
-        };
+        }
+
+        document.getElementById('cancel').onclick = closePopup;
+        document.getElementById('overlay').onclick = closePopup;
     </script>
 </body>
 </html><!DOCTYPE html>
