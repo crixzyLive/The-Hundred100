@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B Sports Live</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             margin: 0;
@@ -34,11 +35,10 @@
             border-radius: 10px;
             padding: 10px;
         }
-        iframe {
+        video {
             width: 100%;
             height: 400px;
             border-radius: 10px;
-            border: none;
         }
         .report {
             background: rgba(255, 255, 255, 0.2);
@@ -97,7 +97,7 @@
 <body>
     <div class="logo">B Sports</div>
     <div class="video-container">
-        <iframe src="YOUR_IFRAME_SOURCE" allowfullscreen></iframe>
+        <video id="video" controls></video>
     </div>
     <div class="report">
         Having issues with the stream? Report problems like buffering or non-working streams at <b>@Axtream_Bingewav</b>.
@@ -114,6 +114,25 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var video = document.getElementById('video');
+            var videoSrc = 'YOUR_M3U8_LINK_HERE';
+            
+            if (Hls.isSupported()) {
+                var hls = new Hls();
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoSrc;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            }
+        });
+        
         window.onload = function() {
             setTimeout(function() {
                 document.getElementById('popup').classList.add('show');
@@ -127,6 +146,7 @@
     </script>
 </body>
 </html>
+
 <!--<!DOCTYPE html>
 <html lang="en">
 <head>
