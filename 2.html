@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Hundred League Championship ⚡</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #ffd700;
+            --primary-blue: #1e3c72;
+            --accent-orange: #ff6b35;
+            --dark-bg: #0a0a0a;
+            --electric-blue: #00ffff;
+            --neon-green: #39ff14;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(45deg, #0a0a0a, #1e3c72, #2a5298, #1e3c72, #0a0a0a);
+            background-size: 400% 400%;
+            animation: championshipGradient 8s ease infinite;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        @keyframes championshipGradient {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 25%; }
+            50% { background-position: 100% 75%; }
+            75% { background-position: 0% 75%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Advanced Hexagon Pattern Background */
+        .hexagon-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: -2;
+            background-image: 
+                radial-gradient(circle at 20% 80%, var(--primary-gold) 2px, transparent 2px),
+                radial-gradient(circle at 80% 20%, var(--electric-blue) 1px, transparent 1px),
+                radial-gradient(circle at 40% 40%, var(--neon-green) 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px, 200px 200px;
+            animation: hexagonFloat 20s linear infinite;
+        }
+
+        @keyframes hexagonFloat {
+            0% { transform: translateX(0) translateY(0); }
+            33% { transform: translateX(-20px) translateY(-20px); }
+            66% { transform: translateX(20px) translateY(-40px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        /* Lightning Effects */
+        .lightning-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .lightning {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+            animation: lightning-strike 4s infinite;
+            opacity: 0;
+        }
+
+        @keyframes lightning-strike {
+            0%, 90%, 100% { opacity: 0; }
+            5%, 10% { opacity: 1; box-shadow: 0 0 50px var(--primary-gold); }
+        }
+
+        /* Header Championship Style */
+        .championship-header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .league-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-orange), var(--electric-blue));
+            background-size: 400% 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: championText 3s ease infinite, titlePulse 2s ease-in-out infinite;
+            text-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        @keyframes championText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); filter: brightness(1.2); }
+        }
+
+        .league-subtitle {
+            font-size: 1.2rem;
+            color: var(--primary-gold);
+            margin-top: 10px;
+            letter-spacing: 2px;
+            animation: subtitleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes subtitleGlow {
+            from { text-shadow: 0 0 10px var(--primary-gold); }
+            to { text-shadow: 0 0 20px var(--primary-gold), 0 0 30px var(--accent-orange); }
+        }
+
+        /* Championship Badge */
+        .championship-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--primary-gold), var(--accent-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+            animation: badgeRotate 10s linear infinite;
+            box-shadow: 0 0 30px var(--primary-gold);
+            z-index: 15;
+        }
+
+        @keyframes badgeRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Live Status - Championship Style */
+        .championship-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            gap: 20px;
+            animation: statusSlideIn 1.5s ease;
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(30, 60, 114, 0.2));
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 15px 30px;
+            border: 2px solid var(--primary-gold);
+        }
+
+        @keyframes statusSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: championPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 30px var(--neon-green);
+            position: relative;
+        }
+
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            top: -10px;
+            left: -10px;
+            animation: ripple 2s infinite;
+        }
+
+        @keyframes championPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .status-text {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+        }
+
+        /* Premium Video Container */
+        .video-arena {
+            position: relative;
+            margin: 50px 0;
+            animation: arenaEntrance 2s ease-out;
+        }
+
+        @keyframes arenaEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(100px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 25px;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(30, 60, 114, 0.2));
+            backdrop-filter: blur(25px);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.4),
+                0 0 100px rgba(255, 215, 0, 0.3),
+                inset 0 2px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            aspect-ratio: 16/9;
+        }
+
+        .video-container::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-orange), var(--electric-blue), var(--neon-green));
+            background-size: 400% 400%;
+            border-radius: 25px;
+            z-index: -1;
+            animation: championBorder 4s ease infinite;
+        }
+
+        @keyframes championBorder {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .video-container:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 
+                0 40px 120px rgba(0, 0, 0, 0.5),
+                0 0 150px rgba(255, 215, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Corner Champions Badges */
+        .corner-badge {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 12px;
+            color: var(--dark-bg);
+            z-index: 10;
+            animation: cornerSpin 15s linear infinite;
+        }
+
+        .corner-badge.top-left {
+            top: 15px;
+            left: 15px;
+        }
+
+        .corner-badge.top-right {
+            top: 15px;
+            right: 15px;
+            animation-direction: reverse;
+        }
+
+        @keyframes cornerSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        #jwplayerDiv {
+            width: 100%;
+            height: 100%;
+            border-radius: 22px;
+            overflow: hidden;
+        }
+
+        /* Championship Leaderboard Style Social */
+        .championship-social {
+            text-align: center;
+            margin: 60px 0;
+            animation: socialSlideUp 2s ease;
+        }
+
+        @keyframes socialSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .social-arena {
+            display: inline-block;
+            position: relative;
+            padding: 40px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.2), rgba(255, 215, 0, 0.1));
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--primary-gold);
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .social-arena::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            animation: socialSweep 3s infinite;
+        }
+
+        @keyframes socialSweep {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .social-arena:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(255, 215, 0, 0.4);
+        }
+
+        .social-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            animation: logoChampion 4s ease-in-out infinite;
+            box-shadow: 0 15px 40px rgba(0, 136, 204, 0.5);
+            transition: all 0.3s ease;
+            border: 3px solid var(--primary-gold);
+        }
+
+        @keyframes logoChampion {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            25% { transform: translateY(-15px) rotate(5deg) scale(1.1); }
+            50% { transform: translateY(-10px) rotate(-5deg) scale(1.05); }
+            75% { transform: translateY(-20px) rotate(3deg) scale(1.08); }
+        }
+
+        .champion-button {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-orange));
+            color: var(--dark-bg);
+            border: none;
+            padding: 18px 40px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Orbitron', monospace;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .champion-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .champion-button:hover::before {
+            left: 100%;
+        }
+
+        .champion-button:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Loading Championship */
+        .championship-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-left: 4px solid var(--primary-gold);
+            border-radius: 50%;
+            animation: championSpin 1s linear infinite;
+        }
+
+        @keyframes championSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-family: 'Orbitron', monospace;
+            color: var(--primary-gold);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Error Championship */
+        .championship-error {
+            text-align: center;
+            color: var(--accent-orange);
+            font-size: 1.4rem;
+            margin: 50px 0;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border: 2px solid var(--accent-orange);
+            animation: errorChampion 2s ease infinite;
+            font-family: 'Orbitron', monospace;
+        }
+
+        @keyframes errorChampion {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        /* Security Overlay - Championship */
+        .security-fortress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.95), rgba(30, 60, 114, 0.9));
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            color: var(--primary-gold);
+            font-size: 28px;
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Responsive Championship */
+        @media (max-width: 768px) {
+            .league-title {
+                font-size: 2.5rem;
+            }
+            
+            .video-container {
+                margin: 20px 10px;
+                border-radius: 20px;
+            }
+            
+            .champion-button {
+                padding: 15px 30px;
+                font-size: 18px;
+            }
+            
+            .social-logo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .championship-badge {
+                width: 80px;
+                height: 80px;
+                font-size: 12px;
+            }
+        }
+    </style>
+    <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+</head>
+<body>
+    <!-- Security Fortress -->
+    <div class="security-fortress" id="securityFortress">
+        <div>
+            <h2>🛡️ CHAMPIONSHIP SECURITY ACTIVE</h2>
+            <p>Unauthorized access detected. Champions only zone!</p>
+        </div>
+    </div>
+
+    <!-- Championship Badge -->
+    <div class="championship-badge">
+        ⚡<br>100<br>LEAGUE
+    </div>
+
+    <!-- Hexagon Background -->
+    <div class="hexagon-bg"></div>
+
+    <!-- Lightning Effects -->
+    <div class="lightning-container" id="lightningContainer"></div>
+
+    <!-- Championship Header -->
+    <div class="championship-header">
+        <div class="league-title">⚡ HUNDRED LEAGUE ⚡</div>
+        <div class="league-subtitle">Championship Live Stream Portal</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Championship Status -->
+        <div class="championship-status">
+            <div class="status-indicator"></div>
+            <div class="status-text">🏆 Live Championship Match</div>
+        </div>
+
+        <!-- Video Arena -->
+        <div class="video-arena">
+            <div class="video-container">
+                <div class="corner-badge top-left">🏆</div>
+                <div class="corner-badge top-right">⚡</div>
+                <div id="jwplayerDiv"></div>
+            </div>
+        </div>
+
+        <!-- Championship Social -->
+        <div class="championship-social">
+            <div class="social-arena">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSJ1cmwoI2dyYWRpZW50MF9saW5lYXJfMV8xKSIvPgo8cGF0aCBkPSJNMjUgNDdMMTQwIDM1TDcyIDI1TDQzIDY3TDMwIDU4TDI1IDQ3WiIgZmlsbD0id2hpdGUiLz4KPGV4dHJhIGZpbGw9IndoaXRlIiBkPSJNNDMgNjdMNDkgNjFMNDUgNTdMNDMgNjdaIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iNTAiIHkxPSIwIiB4Mj0iNTAiIHkyPSIxMDAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzAwODhDQyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGRkQ3MDAiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K" alt="Championship Telegram" class="social-logo">
+                <a href="https://ttttt.me/+jXFxo1HWPlphZTU1" target="_blank" class="champion-button">
+                    ⚡ Join Champions League ⚡
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ultra Advanced Obfuscation & Security System
+        (function() {
+            'use strict';
+            
+            // Advanced Variable Obfuscation
+            const _0x5f8a = [
+                'contextmenu', 'keydown', 'preventDefault', 'keyCode', 'ctrlKey', 'shiftKey',
+                'outerHeight', 'innerHeight', 'outerWidth', 'innerWidth', 'display',
+                'getElementById', 'securityFortress', 'flex', 'none', 'setTimeout',
+                'onselectstart', 'ondragstart', 'addEventListener', 'jwplayer',
+                'jwplayerDiv', 'setup', 'playlist', 'sources', 'file', 'type',
+                'autostart', 'controls', 'ready', 'error', 'innerHTML'
+            ];
+            
+            // Runtime Security Checks
+            let _0x2b4c = {
+                _0x1a: false,
+                _0x2b: null,
+                _0x3c: 0,
+                _0x4d: Date.now()
+            };
+            
+            const _0x7e9f = 160;
+            const _0x8a1b = window['console'];
+            
+            // Multi-layer Protection System
+            const _0x9c2d = function(e) {
+                e[_0x5f8a[2]]();
+                _0x3e4f();
+                return false;
+            };
+            
+            const _0x3e4f = function() {
+                const _0x1f = document[_0x5f8a[11]](_0x5f8a[12]);
+                _0x1f.style[_0x5f8a[10]] = _0x5f8a[13];
+                _0x5f8a[15](() => {
+                    _0x1f.style[_0x5f8a[10]] = _0x5f8a[14];
+                }, 4000);
+            };
+            
+            // Advanced Keystroke Detection
+            const _0x4f5g = function(e) {
+                const _0x2c = e[_0x5f8a[3]];
+                const _0x3d = e[_0x5f8a[4]];
+                const _0x4e = e[_0x5f8a[5]];
+                
+                if (_0x2c === 123 || 
+                    (_0x3d && _0x4e && _0x2c === 73) ||
+                    (_0x3d && _0x2c === 85) ||
+                    (_0x3d && _0x4e && _0x2c === 67) ||
+                    (_0x3d && _0x4e && _0x2c === 74) ||
+                    (_0x3d && _0x4e && _0x2c === 75) ||
+                    _0x2c === 116) {
+                    e[_0x5f8a[2]]();
+                    _0x3e4f();
+                    return false;
+                }
+            };
+            
+            // Window Size Monitoring
+            const _0x5g6h = setInterval(() => {
+                const _0x1h = window[_0x5f8a[6]] - window[_0x5f8a[7]];
+                const _0x2i = window[_0x5f8a[8]] - window[_0x5f8a[9]];
+                
+                if (_0x1h > _0x7e9f || _0x2i > _0x7e9f) {
+                    if (!_0x2b4c._0x1a) {
+                        _0x2b4c._0x1a = true;
+                        _0x3e4f();
+                        _0x2b4c._0x3c++;
+                    }
+                } else {
+                    _0x2b4c._0x1a = false;
+                }
+            }, 300);
+            
+            // Console Override
+            if (typeof _0x8a1b === 'object') {
+                _0x8a1b.log = _0x8a1b.debug = _0x8a1b.info = _0x8a1b.warn = 
+                _0x8a1b.error = _0x8a1b.assert = _0x8a1b.clear = 
+                _0x8a1b.count = _0x8a1b.countReset = _0x8a1b.dir = 
+                _0x8a1b.dirxml = _0x8a1b.group = _0x8a1b.groupEnd = 
+                _0x8a1b.profile = _0x8a1b.profileEnd = _0x8a1b.table = 
+                _0x8a1b.time = _0x8a1b.timeEnd = _0x8a1b.timeLog = 
+                _0x8a1b.trace = () => _0x3e4f();
+            }
+            
+            // Event Binding
+            document[_0x5f8a[18]](_0x5f8a[0], _0x9c2d);
+            document[_0x5f8a[18]](_0x5f8a[1], _0x4f5g);
+            
+            // Additional Security
+            document[_0x5f8a[16]] = () => false;
+            document[_0x5f8a[17]] = () => false;
+            
+            // Performance Monitoring
+            setInterval(() => {
+                _0x2b4c._0x3c > 5 && _0x3e4f();
+            }, 10000);
+            
+        })();
+        
+        // Championship Lightning Effects
+        function createLightning() {
+            const container = document.getElementById('lightningContainer');
+            
+            for (let i = 0; i < 5; i++) {
+                const lightning = document.createElement('div');
+                lightning.className = 'lightning';
+                
+                lightning.style.height = Math.random() * window.innerHeight + 'px';
+                lightning.style.left = Math.random() * window.innerWidth + 'px';
+                lightning.style.animationDelay = Math.random() * 8 + 's';
+                
+                container.appendChild(lightning);
+            }
+        }
+        
+        // Initialize Championship Effects
+        createLightning();
+        
+        // Obfuscated Video Setup
+        const _0xa1b2 = {
+            _0xc3d4: function(p) {
+                const u = new URLSearchParams(window.location.search);
+                return u.get(p);
+            }
+        };
+        
+        const _0xe5f6 = _0xa1b2._0xc3d4("url") || "https://dtvxtream.com/sonyliv2/300256.m3u8";
+        
+        // Show Championship Loading
+        document.getElementById('jwplayerDiv').innerHTML = '<div class="championship-loading"><div class="loading-spinner"></div><div class="loading-text">Loading Championship Stream...</div></div>';
+        
+        // Advanced Player Initialization with Obfuscation
+        const _0xg7h8 = setTimeout(() => {
+            const _0xi9j0 = window[_0x5f8a[19]];
+            
+            if (typeof _0xi9j0 !== 'undefined') {
+                _0xi9j0(_0x5f8a[20])[_0x5f8a[21]]({
+                    [_0x5f8a[22]]: [{
+                        title: "⚡ HUNDRED LEAGUE CHAMPIONSHIP ⚡",
+                        description: "🏆 Live Premium Stream - Champions Only Access",
+                        [_0x5f8a[23]]: [{ 
+                            [_0x5f8a[24]]: _0xe5f6, 
+                            [_0x5f8a[25]]: "hls", 
+                            label: "🏆 Championship HD", 
+                            'default': true 
+                        }]
+                    }],
+                    width: "100%",
+                    height: "100%",
+                    [_0x5f8a[26]]: true,
+                    [_0x5f8a[27]]: true,
+                    mute: false,
+                    stretching: "uniform",
+                    skin: {
+                        name: "netflix"
+                    },
+                    logo: {
+                        file: "",
+                        hide: true
+                    },
+                    primary: "html5"
+                });
+                
+                // Player Event Handlers (Obfuscated)
+                _0xi9j0().on(_0x5f8a[28], function() {
+                    console.log('Championship Stream Ready');
+                    // Additional security layer
+                    _0x2b4c._0x4d = Date.now();
+                });
+                
+                _0xi9j0().on(_0x5f8a[29], function(e) {
+                    document.getElementById(_0x5f8a[20])[_0x5f8a[30]] = 
+                        '<div class="championship-error">⚠️ Championship stream temporarily offline. Checking backup servers...</div>';
+                    
+                    // Auto-retry mechanism
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 10000);
+                });
+            }
+        }, 1500);
+        
+        // Advanced Anti-Debug Measures
+        (function() {
+            let _0xk1l2 = 0;
+            const _0xm3n4 = function() {
+                _0xk1l2++;
+                if (_0xk1l2 > 10) {
+                    document.body.style.display = 'none';
+                    window.location.href = 'about:blank';
+                }
+            };
+            
+            // Debug Detection
+            let _0xo5p6 = false;
+            Object.defineProperty(window, 'console', {
+                get: function() {
+                    _0xo5p6 = true;
+                    _0xm3n4();
+                    return {};
+                }
+            });
+            
+            // Timing Attack Detection
+            let _0xq7r8 = performance.now();
+            setInterval(() => {
+                const _0xs9t0 = performance.now();
+                if (_0xs9t0 - _0xq7r8 > 100) {
+                    _0xm3n4();
+                }
+                _0xq7r8 = _0xs9t0;
+            }, 10);
+            
+            // Memory Usage Monitoring
+            if ('memory' in performance) {
+                let _0xu1v2 = performance.memory.usedJSHeapSize;
+                setInterval(() => {
+                    if (performance.memory.usedJSHeapSize - _0xu1v2 > 50000000) {
+                        _0xm3n4();
+                    }
+                }, 5000);
+            }
+        })();
+        
+        // Dynamic Code Integrity Check
+        const _0xw3x4 = document.getElementsByTagName('script');
+        let _0xy5z6 = '';
+        for (let i = 0; i < _0xw3x4.length; i++) {
+            _0xy5z6 += _0xw3x4[i].innerHTML;
+        }
+        
+        const _0xa7b8 = btoa(_0xy5z6).length;
+        setInterval(() => {
+            let _0xc9d0 = '';
+            for (let i = 0; i < _0xw3x4.length; i++) {
+                _0xc9d0 += _0xw3x4[i].innerHTML;
+            }
+            if (btoa(_0xc9d0).length !== _0xa7b8) {
+                _0x3e4f();
+                window.location.reload();
+            }
+        }, 2000);
+        
+        // Championship Performance Optimization
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(function() {
+                document.body.classList.add('championship-optimized');
+            });
+        }
+        
+        // Advanced Frame Rate Monitoring
+        let _0xe1f2 = 0;
+        let _0xg3h4 = performance.now();
+        
+        function _0xi5j6() {
+            _0xe1f2++;
+            const _0xk7l8 = performance.now();
+            if (_0xk7l8 - _0xg3h4 >= 1000) {
+                if (_0xe1f2 < 30) {
+                    // Low FPS detected, optimize
+                    document.querySelectorAll('.lightning').forEach(el => {
+                        el.style.animationDuration = '8s';
+                    });
+                }
+                _0xe1f2 = 0;
+                _0xg3h4 = _0xk7l8;
+            }
+            requestAnimationFrame(_0xi5j6);
+        }
+        requestAnimationFrame(_0xi5j6);
+        
+        // Championship Theme Dynamic Adjustments
+        const _0xm9n0 = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (_0xm9n0.matches) {
+            document.documentElement.style.setProperty('--animation-speed', '0.5s');
+        }
+        
+        // Viewport-based Lightning Adjustments
+        function updateLightningPositions() {
+            const lightnings = document.querySelectorAll('.lightning');
+            lightnings.forEach(lightning => {
+                lightning.style.left = Math.random() * window.innerWidth + 'px';
+                lightning.style.height = Math.random() * window.innerHeight + 'px';
+            });
+        }
+        
+        window.addEventListener('resize', updateLightningPositions);
+        
+        // Championship Security Heartbeat
+        setInterval(() => {
+            if (Date.now() - _0x2b4c._0x4d > 300000) { // 5 minutes
+                _0x3e4f();
+            }
+        }, 60000);
+        
+        // Dynamic Theme Color Adjustment
+        const _0xo1p2 = new Date().getHours();
+        if (_0xo1p2 >= 18 || _0xo1p2 <= 6) {
+            document.documentElement.style.setProperty('--primary-gold', '#ffaa00');
+            document.documentElement.style.setProperty('--electric-blue', '#0088ff');
+        }
+        
+        // Championship Audio Context (if available)
+        if ('AudioContext' in window || 'webkitAudioContext' in window) {
+            const _0xq3r4 = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Create subtle championship ambiance
+            const _0xs5t6 = _0xq3r4.createOscillator();
+            const _0xu7v8 = _0xq3r4.createGain();
+            
+            _0xs5t6.connect(_0xu7v8);
+            _0xu7v8.connect(_0xq3r4.destination);
+            
+            _0xs5t6.frequency.setValueAtTime(220, _0xq3r4.currentTime);
+            _0xu7v8.gain.setValueAtTime(0.001, _0xq3r4.currentTime);
+            
+            // Only start on user interaction
+            document.addEventListener('click', () => {
+                if (_0xq3r4.state === 'suspended') {
+                    _0xq3r4.resume();
+                }
+            }, { once: true });
+        }
+        
+        // Final Championship Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scroll enhancement
+            document.documentElement.style.scrollBehavior = 'smooth';
+            
+            // Championship entrance animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 1s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+        
+        // Network Status Monitoring
+        if ('navigator' in window && 'onLine' in navigator) {
+            const updateNetworkStatus = () => {
+                const statusText = document.querySelector('.status-text');
+                if (!navigator.onLine) {
+                    statusText.textContent = '🔄 Reconnecting to Championship...';
+                    statusText.style.color = '#ff6b35';
+                } else {
+                    statusText.textContent = '🏆 Live Championship Match';
+                    statusText.style.color = '#ffd700';
+                }
+            };
+            
+            window.addEventListener('online', updateNetworkStatus);
+            window.addEventListener('offline', updateNetworkStatus);
+        }
+        
+        // Championship Success Indicator
+        setTimeout(() => {
+            console.log('%c⚡ HUNDRED LEAGUE CHAMPIONSHIP PORTAL LOADED ⚡', 
+                'color: #ffd700; font-size: 20px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);');
+            console.log('%c🏆 Premium Security System Active 🏆', 
+                'color: #00ffff; font-size: 16px; font-weight: bold;');
+        }, 2000);
+    </script>
+</body>
+</html>
