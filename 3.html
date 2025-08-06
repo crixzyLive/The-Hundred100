@@ -1,51 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>M3U8 Player with DPlayer</title>
-    <style>
-        body {
-            margin: 0;
-            background-color: #000;
-        }
-        #dplayer {
-            width: 100%;
-            height: 100vh;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>DPlayer M3U8 Example</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+    }
+    #dplayer {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
 </head>
 <body>
-    <div id="dplayer"></div>
+  <div id="dplayer"></div>
 
-    <!-- HLS.js (required for M3U8 playback) -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <!-- HLS.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  
+  <!-- DPlayer -->
+  <script src="https://cdn.jsdelivr.net/npm/dplayer@1.26.0/dist/DPlayer.min.js"></script>
 
-    <!-- DPlayer -->
-    <script src="https://cdn.jsdelivr.net/npm/dplayer@1.26.0/dist/DPlayer.min.js"></script>
+  <script>
+    const isHlsSupported = Hls.isSupported();
 
-    <script>
-        const dp = new DPlayer({
-            container: document.getElementById('dplayer'),
-            live: true,
-            autoplay: true,
-            video: {
-                url: 'https://tataplay.slivcdn.com/hls/live/2011747/TEN1HD/master_2000.m3u8',
-                type: 'customHls',
-                customType: {
-                    customHls: function (video, player) {
-                        if (Hls.isSupported()) {
-                            const hls = new Hls();
-                            hls.loadSource(video.src);
-                            hls.attachMedia(video);
-                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                            video.src = video.src;
-                        } else {
-                            alert('HLS is not supported in your browser.');
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+    const dp = new DPlayer({
+      container: document.getElementById('dplayer'),
+      autoplay: true,
+      live: true,
+      screenshot: false,
+      video: {
+        url: 'https://tataplay.slivcdn.com/hls/live/2011747/TEN1HD/master_2000.m3u8',
+        type: isHlsSupported ? 'customHls' : 'auto',
+        customType: {
+          customHls: function(video, player) {
+            const hls = new Hls();
+            hls.loadSource(video.src);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+              video.play();
+            });
+            hls.on(Hls.Events.ERROR, function(event, data) {
+              console.error('HLS.js error:', data);
+              player.notice('Error loading video stream', 3000, 0.8);
+            });
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
