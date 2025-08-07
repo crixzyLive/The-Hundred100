@@ -487,11 +487,11 @@
 
         <!-- Player Controls -->
         <div class="player-controls">
-            <button class="toggle-btn active" id="m3u8Btn" onclick="switchToM3U8()">
-                📺 M3U8 Player
+            <button class="toggle-btn active" id="m3u8Btn" onclick="switchToEnglish()">
+                🇺🇸 English Stream
             </button>
-            <button class="toggle-btn" id="iframeBtn" onclick="switchToIframe()">
-                🌐 Web Player
+            <button class="toggle-btn" id="iframeBtn" onclick="switchToHindi()">
+                🇮🇳 Hindi Stream
             </button>
         </div>
 
@@ -527,7 +527,7 @@
 
     <script>
         // Player state management
-        let currentPlayer = 'm3u8';
+        let currentPlayer = 'english';
         let jwPlayerInitialized = false;
 
         // Enhanced Security Protection
@@ -631,10 +631,10 @@
         }
 
         // Player switching functions
-        function switchToM3U8() {
-            if (currentPlayer === 'm3u8') return;
+        function switchToEnglish() {
+            if (currentPlayer === 'english') return;
             
-            currentPlayer = 'm3u8';
+            currentPlayer = 'english';
             
             // Update button states
             document.getElementById('m3u8Btn').classList.add('active');
@@ -649,13 +649,13 @@
                 initializeJWPlayer();
             }
             
-            console.log('Switched to M3U8 Player');
+            console.log('Switched to English Stream (M3U8 Player)');
         }
 
-        function switchToIframe() {
-            if (currentPlayer === 'iframe') return;
+        function switchToHindi() {
+            if (currentPlayer === 'hindi') return;
             
-            currentPlayer = 'iframe';
+            currentPlayer = 'hindi';
             
             // Update button states
             document.getElementById('iframeBtn').classList.add('active');
@@ -671,7 +671,7 @@
                 iframe.src = 'https://starry7c.github.io/Sony-hindi';
             }
             
-            console.log('Switched to Iframe Player');
+            console.log('Switched to Hindi Stream (Iframe Player)');
         }
 
         // Video Player Setup
