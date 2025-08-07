@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRXCxCIL - Premium Streaming</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: linear-gradient(45deg, #00d4ff, #ff4081, #ffeb3b);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+            opacity: 0.1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00d4ff, #ff4081, #ffeb3b, #4caf50);
+            background-size: 400% 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: textGradient 3s ease infinite, pulse 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        @keyframes textGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Player Toggle Buttons */
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            animation: fadeInUp 1s ease;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-width: 120px;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .toggle-btn:hover::before {
+            left: 100%;
+        }
+
+        .toggle-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .toggle-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Video Container */
+        .video-wrapper {
+            position: relative;
+            margin: 40px 0;
+            transform: translateY(0);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(0, 212, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            aspect-ratio: 16/9;
+        }
+
+        .video-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 35px 70px rgba(0, 0, 0, 0.4),
+                0 0 150px rgba(0, 212, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .video-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00d4ff, #ff4081, #ffeb3b, #4caf50);
+            background-size: 400% 400%;
+            border-radius: 20px;
+            z-index: -1;
+            animation: borderGlow 3s ease infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #jwplayerDiv, #iframeDiv {
+            width: 100%;
+            height: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .iframe-player {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 18px;
+        }
+
+        .player-container {
+            display: none;
+        }
+
+        .player-container.active {
+            display: block;
+        }
+
+        /* Status Indicator */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 15px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #4caf50;
+            border-radius: 50%;
+            animation: breathe 2s ease-in-out infinite;
+            box-shadow: 0 0 20px #4caf50;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .status-text {
+            font-weight: 600;
+            color: #4caf50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Telegram Section */
+        .telegram-section {
+            text-align: center;
+            margin: 50px 0;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        .telegram-container {
+            display: inline-block;
+            position: relative;
+            padding: 30px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.2), rgba(0, 102, 153, 0.2));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 136, 204, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .telegram-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 136, 204, 0.3);
+        }
+
+        .telegram-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            animation: logoFloat 3s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(0, 136, 204, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .telegram-logo:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .telegram-button {
+            background: linear-gradient(45deg, #0088cc, #006699);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .telegram-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .telegram-button:hover::before {
+            left: 100%;
+        }
+
+        .telegram-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 136, 204, 0.4);
+        }
+
+        /* Error Message */
+        .error-message {
+            text-align: center;
+            color: #ff4444;
+            font-size: 1.2rem;
+            margin: 40px 0;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            animation: errorPulse 2s ease infinite;
+        }
+
+        @keyframes errorPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .video-container {
+                margin: 20px 10px;
+                border-radius: 15px;
+            }
+            
+            .telegram-button {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            
+            .telegram-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .player-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .toggle-btn {
+                min-width: 200px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Security Overlay (Anti-Inspect) */
+        .security-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: #ff4444;
+            font-size: 24px;
+            text-align: center;
+        }
+    </style>
+    <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+</head>
+<body>
+    <!-- Security Overlay -->
+    <div class="security-overlay" id="securityOverlay">
+        <div>
+            <h2>🔒 ACCESS DENIED</h2>
+            <p>Developer tools are not allowed on this page.</p>
+        </div>
+    </div>
+
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">CRXCxCIL</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-dot"></div>
+            <div class="status-text">Live Streaming</div>
+        </div>
+
+        <!-- Player Controls -->
+        <div class="player-controls">
+            <button class="toggle-btn active" id="m3u8Btn" onclick="switchToM3U8()">
+                📺 M3U8 Player
+            </button>
+            <button class="toggle-btn" id="iframeBtn" onclick="switchToIframe()">
+                🌐 Web Player
+            </button>
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-wrapper">
+            <div class="video-container">
+                <!-- M3U8 Player Container -->
+                <div id="jwplayerDiv" class="player-container active"></div>
+                
+                <!-- Iframe Player Container -->
+                <div id="iframeDiv" class="player-container">
+                    <iframe 
+                        id="webPlayer"
+                        class="iframe-player"
+                        src=""
+                        allowfullscreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Telegram Section -->
+        <div class="telegram-section">
+            <div class="telegram-container">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxwYXRoIGQ9Ik0yMC41IDM4LjVMMzUuNSAyOC41TDU3LjUgMjBMMzQuNSA1My41TDI0IDQ2LjVMMjAuNSAzOC41WiIgZmlsbD0id2hpdGUiLz4KPGV4dHJhIGZpbGw9IndoaXRlIiBkPSJNMzQuNSA1My41TDM5IDQ5TDM1LjUgNDZMMzQuNSA1My41WiIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudDBfbGluZWFyXzFfMSIgeDE9IjQwIiB5MT0iMCIgeDI9IjQwIiB5Mj0iODAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzAwODhDQyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDY2OTkiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K" alt="Telegram" class="telegram-logo">
+                <a href="https://telegram.me/+RT_XWFZCSE5kNWU1" target="_blank" class="telegram-button">
+                    Join Our Channel
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Player state management
+        let currentPlayer = 'm3u8';
+        let jwPlayerInitialized = false;
+
+        // Enhanced Security Protection
+        (function() {
+            // Disable right-click
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showSecurityOverlay();
+                return false;
+            });
+
+            // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
+            document.addEventListener('keydown', function(e) {
+                // F12
+                if (e.keyCode === 123) {
+                    e.preventDefault();
+                    showSecurityOverlay();
+                    return false;
+                }
+                // Ctrl+Shift+I
+                if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                    e.preventDefault();
+                    showSecurityOverlay();
+                    return false;
+                }
+                // Ctrl+U
+                if (e.ctrlKey && e.keyCode === 85) {
+                    e.preventDefault();
+                    showSecurityOverlay();
+                    return false;
+                }
+                // Ctrl+Shift+C
+                if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+                    e.preventDefault();
+                    showSecurityOverlay();
+                    return false;
+                }
+                // Ctrl+Shift+J
+                if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+                    e.preventDefault();
+                    showSecurityOverlay();
+                    return false;
+                }
+            });
+
+            // Detect DevTools
+            let devtools = {
+                open: false,
+                orientation: null
+            };
+
+            const threshold = 160;
+
+            setInterval(() => {
+                if (window.outerHeight - window.innerHeight > threshold || 
+                    window.outerWidth - window.innerWidth > threshold) {
+                    if (!devtools.open) {
+                        devtools.open = true;
+                        showSecurityOverlay();
+                    }
+                } else {
+                    devtools.open = false;
+                }
+            }, 500);
+
+            function showSecurityOverlay() {
+                document.getElementById('securityOverlay').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('securityOverlay').style.display = 'none';
+                }, 3000);
+            }
+
+            // Disable text selection
+            document.onselectstart = function() {
+                return false;
+            };
+
+            // Disable drag
+            document.ondragstart = function() {
+                return false;
+            };
+        })();
+
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Player switching functions
+        function switchToM3U8() {
+            if (currentPlayer === 'm3u8') return;
+            
+            currentPlayer = 'm3u8';
+            
+            // Update button states
+            document.getElementById('m3u8Btn').classList.add('active');
+            document.getElementById('iframeBtn').classList.remove('active');
+            
+            // Show M3U8 player, hide iframe
+            document.getElementById('jwplayerDiv').classList.add('active');
+            document.getElementById('iframeDiv').classList.remove('active');
+            
+            // Initialize JW Player if not already done
+            if (!jwPlayerInitialized) {
+                initializeJWPlayer();
+            }
+            
+            console.log('Switched to M3U8 Player');
+        }
+
+        function switchToIframe() {
+            if (currentPlayer === 'iframe') return;
+            
+            currentPlayer = 'iframe';
+            
+            // Update button states
+            document.getElementById('iframeBtn').classList.add('active');
+            document.getElementById('m3u8Btn').classList.remove('active');
+            
+            // Show iframe, hide M3U8 player
+            document.getElementById('iframeDiv').classList.add('active');
+            document.getElementById('jwplayerDiv').classList.remove('active');
+            
+            // Load iframe if not already loaded
+            const iframe = document.getElementById('webPlayer');
+            if (!iframe.src) {
+                iframe.src = 'https://starry7c.github.io/Sony-hindi';
+            }
+            
+            console.log('Switched to Iframe Player');
+        }
+
+        // Video Player Setup
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function initializeJWPlayer() {
+            // Get stream URL from query parameter or use default
+            const streamUrl = getQueryParam("url") || "https://dtvxtream.com/sonyliv2/300256.m3u8";
+
+            // Show loading state
+            document.getElementById('jwplayerDiv').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+            // Initialize JW Player
+            setTimeout(() => {
+                jwplayer("jwplayerDiv").setup({
+                    playlist: [{
+                        title: "Premium Live Stream",
+                        description: "UEFA Youth League 2024-25 | HD Quality",
+                        sources: [{ 
+                            file: streamUrl, 
+                            type: "hls", 
+                            label: "1080p HD", 
+                            default: true 
+                        }]
+                    }],
+                    width: "100%",
+                    height: "100%",
+                    autostart: true,
+                    controls: true,
+                    mute: false,
+                    stretching: "uniform",
+                    skin: {
+                        name: "netflix"
+                    },
+                    logo: {
+                        file: "",
+                        hide: true
+                    },
+                    advertising: {
+                        client: "vast"
+                    }
+                });
+
+                // Handle player events
+                jwplayer().on('ready', function() {
+                    console.log('JW Player is ready');
+                    jwPlayerInitialized = true;
+                });
+
+                jwplayer().on('error', function(e) {
+                    document.getElementById('jwplayerDiv').innerHTML = 
+                        '<div class="error-message">⚠️ Stream temporarily unavailable. Please try again later.</div>';
+                });
+            }, 1000);
+        }
+
+        // Initialize particles
+        createParticles();
+
+        // Initialize M3U8 player on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeJWPlayer();
+        });
+
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Enhanced performance monitoring
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(function() {
+                // Optimize animations when idle
+                document.body.classList.add('optimized');
+            });
+        }
+    </script>
+</body>
+</html>
